@@ -1,18 +1,20 @@
-# pynset
-## 창업경진대회
-- 이 웹사이트를 만들기 위해 ai스튜디오에서 입력한 프롬프트입니다
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-- **prompt 1**
+# Run and deploy your AI Studio app
 
-첨부한 파일들을 참고해서 데이트 코스(꼭 연인 간의 데이트가 아니어도 됨)를 짜주는 웹사이트를 만들려고 해. 첨부한 파일의 이미지와 같은 화면이 되게 하면 좋겠어. 그러니까 챗봇 느낌으로 사용자와 대화하며 추천 목록을 띄워주고, 사용자가 그중에 선택하면 그걸 일정으로 만들고 지도로 보여주는 걸 원해.
-PYNSET 회의록 및 초안 - Google Docs.pdf
-PYNSET 회의록 및 초안1 - Google Docs.pdf
+This contains everything you need to run your app locally.
 
-- **prompt 2**
+View your app in AI Studio: https://ai.studio/apps/51f719cd-4759-4663-8d1b-1be872f53467
 
-구글 맵과 연결해서 실제 있는 식당을 추천해주면 좋겠어.
-구글 맵과 연결해서 장소가 화면에 표시되면 좋겠고, 동선을 선으로 이어주면 좋겠고, 방문 순서대로 장소에 번호를 붙여서 지도에 표시해주면 좋겠어.
-대화를 이어나갈 때마다 지도가 점점 위아래로 길어지는 문제가 있어.
-일정 순서를 드래그로 바꿀 수 없는 문제가 있어.
-채팅에 첫 대화 말고 이후 대화에서는 내가 하는 말을 잘 알아듣지 못해. 완전 ai처럼 대답해줄 수 있으면 좋겠어
-실제 없는 장소를 나오게 하지 않도록 꼼꼼히 확인해주면 좋겠어
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
