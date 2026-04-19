@@ -149,9 +149,9 @@ export default function Chat({ messages, onSendMessage, onSelectOption, isTyping
             </button>
           </div>
         </form>
-        <p className="mt-3 text-center text-[10px] text-gray-400">
+        {/* <p className="mt-3 text-center text-[10px] text-gray-400">
           예: 어제 싸운 여자친구와 화해할 수 있는 데이트
-        </p>
+        </p> */}
       </div>
     </div>
   );
