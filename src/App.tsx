@@ -85,7 +85,7 @@ export default function App() {
       <header className="h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50 px-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-8">
           <div className="flex flex-col">
-            <h1 className="text-xl font-black tracking-tighter text-blue-600">PYNSET</h1>
+            <h1 className="text-xl font-black tracking-tighter text-emerald-600">PYNSET</h1>
             <p className="text-[10px] text-gray-400 font-medium">성수동 실패 제로 데이트 큐레이션</p>
           </div>
           <nav className="hidden md:flex items-center gap-6">
