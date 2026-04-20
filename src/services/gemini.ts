@@ -1,64 +1,6 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { ChatMessage, Place } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
-
-const SYSTEM_INSTRUCTION = `
-You are "PYNSET AI", a high-end date course curator for Seongsu-dong, Seoul.
-Your goal is to provide a "Toss-style" minimal and precise conversation to help users build a perfect date course.
-
-Follow these rules:
-1. Be polite, professional, and helpful in Korean.
-2. Focus on one step at a time.
-3. Steps:
-   - Step 1: Ask for the general mood or purpose (e.g., "지금 핫한 팝업 코스", "조용한 소개팅 필수 코스").
-   - Step 2: Recommend a real Pop-up store in Seongsu-dong based on the mood.
-   - Step 3: Recommend a real Food place in Seongsu-dong near the selected Pop-up.
-   - Step 4: Recommend a real Cafe in Seongsu-dong to finish the course.
-4. When recommending, provide 3-4 distinct options with clear labels and emojis.
-5. ALWAYS ensure the places are REAL and located in Seongsu-dong (성수동).
-6. Return the response in a structured JSON format if the user is making a selection or if you are providing recommendations.
-
-Response Format:
-{
-  "text": "The message to display to the user",
-  "options": [
-    { "label": "Display Name", "value": "internal_id_or_name", "icon": "emoji", "metadata": { "name": "Real Name", "lat": number, "lng": number, "description": "Short desc", "time": "HH:MM" } }
-  ],
-  "isComplete": boolean
-}
-`;
-
-export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
-  try {
-    const history = messages.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: history,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
-        responseMimeType: "application/json",
-        tools: [{ googleSearch: {} }]
-      },
-    });
-
-    const result = JSON.parse(response.text || "{}");
-    return result;
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return {
-      text: "연결에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
-      options: []
-    };
-  }
-}
-
-// Real Seongsu-dong places for fallback/initial state
+// 기존 MOCK_PLACES 데이터 활용
 export const MOCK_PLACES: Record<string, Place[]> = {
   popup: [
     { id: 'p1', name: '디올 성수', type: 'popup', description: '화려한 외관과 럭셔리한 경험', time: '14:00', lat: 37.5441, lng: 127.0566 },
@@ -76,3 +18,74 @@ export const MOCK_PLACES: Record<string, Place[]> = {
     { id: 'c3', name: '블루보틀 성수', type: 'cafe', description: '미니멀한 디자인의 스페셜티 커피', time: '17:00', lat: 37.5479, lng: 127.0474 },
   ]
 };
+
+/**
+ * 헬퍼 함수: Place 객체를 API 응답용 Option 형식으로 변환
+ */
+const transformToOptions = (places: Place[]) => {
+  return places.map(p => ({
+    label: p.name,
+    value: p.id,
+    icon: p.type === 'popup' ? '✨' : p.type === 'food' ? '🍽️' : '☕',
+    metadata: {
+      name: p.name,
+      lat: p.lat,
+      lng: p.lng,
+      description: p.description,
+      time: p.time
+    }
+  }));
+};
+
+export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
+  // 1. 대화 내역에서 어시스턴트 응답 개수를 파악하여 현재 Step 결정
+  const assistantMessages = messages.filter(m => m.role === 'assistant');
+  const stepCount = assistantMessages.length;
+
+  // Step 1: 초기 진입 (무드 선택)
+  if (stepCount === 0) {
+    return {
+      text: "반갑습니다. PYNSET AI입니다. 성수동에서의 완벽한 데이트를 위해 먼저 원하시는 데이트의 무드를 알려주시겠어요?",
+      options: [
+        { label: "지금 핫한 팝업 코스", value: "hot_popup", icon: "🔥" },
+        { label: "조용한 소개팅 필수 코스", value: "quiet_blind_date", icon: "🤫" },
+        { label: "힙한 감성의 인스타 맛집", value: "insta_vibe", icon: "📸" }
+      ],
+      isComplete: false
+    };
+  }
+
+  // Step 2: 팝업 스토어 추천
+  if (stepCount === 1) {
+    return {
+      text: "좋은 선택입니다! 먼저 방문하실 만한 성수동의 팝업 스토어들을 모아봤어요. 마음에 드는 곳을 골라주세요.",
+      options: transformToOptions(MOCK_PLACES.popup),
+      isComplete: false
+    };
+  }
+
+  // Step 3: 맛집 추천
+  if (stepCount === 2) {
+    return {
+      text: "근처에서 식사하기 좋은 맛집들입니다. 어떤 메뉴가 좋으실까요?",
+      options: transformToOptions(MOCK_PLACES.food),
+      isComplete: false
+    };
+  }
+
+  // Step 4: 카페 추천
+  if (stepCount === 3) {
+    return {
+      text: "마지막으로 대화를 나누며 쉬어갈 수 있는 카페를 추천해 드릴게요.",
+      options: transformToOptions(MOCK_PLACES.cafe),
+      isComplete: false
+    };
+  }
+
+  // Step 5: 마무리
+  return {
+    text: "모든 코스가 완성되었습니다! 즐거운 데이트 되시길 바랍니다. 지도를 확인해 보세요.",
+    options: [],
+    isComplete: true
+  };
+}
