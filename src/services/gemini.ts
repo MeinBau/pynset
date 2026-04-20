@@ -8,9 +8,10 @@ export const MOCK_PLACES: Record<string, Place[]> = {
     { id: 'p3', name: '무신사 스탠다드X노홍철 팝업', type: 'popup', description: '노홍철의 에너지가 담긴 럭키 가이 컬렉션 출시!', time: '14:00', lat: 37.5421, lng: 127.0612 },
   ],
   food: [
-    { id: 'f1', name: '대성갈비', type: 'food', description: '수요미식회에 나온 성수동 갈비 맛집', time: '15:30', lat: 37.5471, lng: 127.0435 },
-    { id: 'f2', name: '소문난 성수 감자탕', type: 'food', description: '24시간 줄 서서 먹는 감자탕 명소', time: '15:30', lat: 37.5427, lng: 127.0571 },
-    { id: 'f3', name: '할머니의 레시피', type: 'food', description: '깔끔하고 정갈한 한식 가정식', time: '15:30', lat: 37.5478, lng: 127.0421 },
+    { id: 'f1', name: '칙피스 성수점', type: 'food', description: '현지의 맛을 느낄 수 있는 지중해식 할랄 푸드', time: '15:30', lat: 37.5471, lng: 127.0435 },
+    { id: 'f2', name: '르베지왕 성수공간', type: 'food', description: '귀리밥이 들어있는 샐러드볼 맛집', time: '15:30', lat: 37.5427, lng: 127.0571 },
+    { id: 'f3', name: '라지라프', type: 'food', description: '', time: '15:30', lat: 37.5478, lng: 127.0421 },
+    { id: 'f4', name: 'PYNSET의 추천', type: 'popup', description: '', time: '15:30', lat: 37.5478, lng: 127.0421 },
   ],
   cafe: [
     { id: 'c1', name: '대림창고', type: 'cafe', description: '성수동 카페거리의 상징적인 갤러리 카페', time: '17:00', lat: 37.5414, lng: 127.0586 },
@@ -58,8 +59,8 @@ export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
   // Step 2: 팝업 스토어 추천
   if (stepCount === 1) {
     return {
-      text: "좋은 선택입니다! 먼저 방문하실 만한 성수동의 팝업 스토어들을 모아봤어요. 마음에 드는 곳을 골라주세요.",
-      options: transformToOptions(MOCK_PLACES.popup),
+      text: "먼저 할랄(Halal) 인증을 받은 식당을 골라봤어요. 어떤 메뉴가 좋으실까요?",
+      options: transformToOptions(MOCK_PLACES.food),
       isComplete: false
     };
   }
