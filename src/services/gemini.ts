@@ -59,7 +59,7 @@ export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
   // Step 2: 팝업 스토어 추천
   if (stepCount === 1) {
     return {
-      text: "먼저 할랄(Halal) 인증을 받은 식당을 골라봤어요. 어떤 메뉴가 좋으실까요?",
+      text: "무슬림 일행과 함께 성수를 여행하신다면, 할랄 음식과 기도실 접근성을 고려해보는 게 좋아요. 먼저 할랄 인증을 받은 식당을 골라봤어요. 어떤 메뉴가 좋으실까요?",
       options: transformToOptions(MOCK_PLACES.food),
       isComplete: false
     };
