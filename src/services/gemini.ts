@@ -1,17 +1,16 @@
 import { ChatMessage, Place } from "../types";
 
-// 기존 MOCK_PLACES 데이터 활용
+// 1. MOCK_PLACES: 성수동의 대중적인 핫플레이스로 데이터 업데이트
 export const MOCK_PLACES: Record<string, Place[]> = {
   popup: [
-    { id: 'p1', name: '몬스터에너지 팝업', type: 'popup', description: '에너지 드링크 팝업', time: '14:00', lat: 37.5441, lng: 127.0566 },
-    { id: 'p2', name: '메리퓨어 팝업', type: 'popup', description: '메리퓨어의 향기 컬렉션', time: '14:00', lat: 37.5455, lng: 127.0523 },
-    { id: 'p3', name: '무신사 스탠다드X노홍철 팝업', type: 'popup', description: '노홍철의 에너지가 담긴 럭키 가이 컬렉션 출시!', time: '14:00', lat: 37.5421, lng: 127.0612 },
+    { id: 'p1', name: '몬스터에너지 팝업', type: 'popup', description: '강렬한 에너지와 익스트림 스포츠 감성을 체험해보세요!', time: '14:00', lat: 37.5441, lng: 127.0566 },
+    { id: 'p2', name: '메리퓨어 팝업', type: 'popup', description: '은은한 향기와 함께하는 감성적인 라이프스타일 전시', time: '14:00', lat: 37.5455, lng: 127.0523 },
+    { id: 'p3', name: '무신사 스탠다드X노홍철', type: 'popup', description: '긍정 에너지 폭발! 노홍철의 럭키가이 컬렉션', time: '14:00', lat: 37.5421, lng: 127.0612 },
   ],
   food: [
-    { id: 'f1', name: '칙피스 성수점', type: 'food', description: '현지의 맛을 느낄 수 있는 지중해식 할랄 푸드', time: '15:30', lat: 37.5471, lng: 127.0435 },
-    { id: 'f2', name: '르베지왕 성수공간', type: 'food', description: '귀리밥이 들어있는 샐러드볼 맛집', time: '15:30', lat: 37.5427, lng: 127.0571 },
-    { id: 'f3', name: '라지라프', type: 'food', description: '', time: '15:30', lat: 37.5478, lng: 127.0421 },
-    { id: 'f4', name: 'PYNSET의 추천', type: 'popup', description: '', time: '15:30', lat: 37.5478, lng: 127.0421 },
+    { id: 'f1', name: '살라댕템플', type: 'food', description: '배를 타고 들어가는 이색적인 분위기의 퓨전 타이 다이닝', time: '15:30', lat: 37.5451, lng: 127.0601 },
+    { id: 'f2', name: '쵸리상경', type: 'food', description: '정갈하고 든든한 솥밥 한 끼, 성수동 줄 서는 맛집', time: '15:30', lat: 37.5435, lng: 127.0423 },
+    { id: 'f3', name: '조와이', type: 'food', description: '세련된 분위기에서 즐기는 생면 파스타와 와인', time: '15:30', lat: 37.5472, lng: 127.0415 },
   ],
   cafe: [
     { id: 'c1', name: '대림창고', type: 'cafe', description: '성수동 카페거리의 상징적인 갤러리 카페', time: '17:00', lat: 37.5414, lng: 127.0586 },
@@ -20,9 +19,6 @@ export const MOCK_PLACES: Record<string, Place[]> = {
   ]
 };
 
-/**
- * 헬퍼 함수: Place 객체를 API 응답용 Option 형식으로 변환
- */
 const transformToOptions = (places: Place[]) => {
   return places.map(p => ({
     label: p.name,
@@ -39,14 +35,13 @@ const transformToOptions = (places: Place[]) => {
 };
 
 export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
-  // 1. 대화 내역에서 어시스턴트 응답 개수를 파악하여 현재 Step 결정
   const assistantMessages = messages.filter(m => m.role === 'assistant');
   const stepCount = assistantMessages.length;
 
-  // Step 1: 초기 진입 (무드 선택)
+  // Step 1: 환영 멘트
   if (stepCount === 0) {
     return {
-      text: "반갑습니다. PYNSET AI입니다. 성수동에서의 완벽한 데이트를 위해 먼저 원하시는 데이트의 무드를 알려주시겠어요?",
+      text: "안녕하세요! 성수동 데이트 메이트 PYNSET입니다. 😊 오늘 어떤 느낌의 하루를 보내고 싶으신가요? 원하시는 코스 무드를 알려주세요!",
       options: [
         { label: "지금 핫한 팝업 코스", value: "hot_popup", icon: "🔥" },
         { label: "조용한 소개팅 필수 코스", value: "quiet_blind_date", icon: "🤫" },
@@ -56,19 +51,19 @@ export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
     };
   }
 
-  // Step 2: 팝업 스토어 추천
+  // Step 2: 팝업 추천
   if (stepCount === 1) {
     return {
-      text: "무슬림 일행과 함께 성수를 여행하신다면, 할랄 음식과 기도실 접근성을 고려해보는 게 좋아요. 먼저 할랄 인증을 받은 식당을 골라봤어요. 어떤 메뉴가 좋으실까요?",
-      options: transformToOptions(MOCK_PLACES.food),
+      text: "좋아요! 요즘 성수에서 가장 화제인 팝업스토어들이에요. 가장 가보고 싶은 곳을 골라보세요!",
+      options: transformToOptions(MOCK_PLACES.popup),
       isComplete: false
     };
   }
 
-  // Step 3: 맛집 추천
+  // Step 3: 맛집 추천 (평범하고 인기 많은 곳으로 수정)
   if (stepCount === 2) {
     return {
-      text: "근처에서 식사하기 좋은 맛집들입니다. 어떤 메뉴가 좋으실까요?",
+      text: "구경하다 보면 배가 고파질 텐데요! 팝업 근처에서 가장 리뷰가 좋고 분위기 있는 식당들을 준비했어요. 어떤 메뉴가 좋을까요?",
       options: transformToOptions(MOCK_PLACES.food),
       isComplete: false
     };
@@ -77,7 +72,7 @@ export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
   // Step 4: 카페 추천
   if (stepCount === 3) {
     return {
-      text: "마지막으로 대화를 나누며 쉬어갈 수 있는 카페를 추천해 드릴게요.",
+      text: "마지막으로 대화를 나누며 여유를 즐길 수 있는 카페를 추천해 드릴게요. 성수의 감성을 제대로 느낄 수 있는 곳들이에요.",
       options: transformToOptions(MOCK_PLACES.cafe),
       isComplete: false
     };
@@ -85,7 +80,7 @@ export async function getNextResponse(messages: ChatMessage[]): Promise<any> {
 
   // Step 5: 마무리
   return {
-    text: "모든 코스가 완성되었습니다! 즐거운 데이트 되시길 바랍니다. 지도를 확인해 보세요.",
+    text: "짠! 당신을 위한 성수동 데이트 코스가 완성되었습니다. ✨ 지도를 확인하며 즐거운 시간 보내시길 바랄게요!",
     options: [],
     isComplete: true
   };
