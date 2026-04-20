@@ -3,9 +3,9 @@ import { ChatMessage, Place } from "../types";
 // 기존 MOCK_PLACES 데이터 활용
 export const MOCK_PLACES: Record<string, Place[]> = {
   popup: [
-    { id: 'p1', name: '디올 성수', type: 'popup', description: '화려한 외관과 럭셔리한 경험', time: '14:00', lat: 37.5441, lng: 127.0566 },
-    { id: 'p2', name: '무신사 테라스 성수', type: 'popup', description: '패션 트렌드를 한눈에 보는 공간', time: '14:00', lat: 37.5455, lng: 127.0523 },
-    { id: 'p3', name: 'LCDC SEOUL', type: 'popup', description: '다양한 브랜드가 모인 복합문화공간', time: '14:00', lat: 37.5421, lng: 127.0612 },
+    { id: 'p1', name: '몬스터에너지 팝업', type: 'popup', description: '에너지 드링크 팝업', time: '14:00', lat: 37.5441, lng: 127.0566 },
+    { id: 'p2', name: '메리퓨어 팝업', type: 'popup', description: '메리퓨어의 향기 컬렉션', time: '14:00', lat: 37.5455, lng: 127.0523 },
+    { id: 'p3', name: '무신사 스탠다드X노홍철 팝업', type: 'popup', description: '노홍철의 에너지가 담긴 럭키 가이 컬렉션 출시!', time: '14:00', lat: 37.5421, lng: 127.0612 },
   ],
   food: [
     { id: 'f1', name: '대성갈비', type: 'food', description: '수요미식회에 나온 성수동 갈비 맛집', time: '15:30', lat: 37.5471, lng: 127.0435 },
